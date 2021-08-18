@@ -42,7 +42,7 @@ paths:
                     example: 'https://www.chiaexplorer.com/blockchain/coin/#COIN#'
                   blockExplorerAddressUrlTemplate:
                     type: string
-                    example: 'https://www.chiaexplorer.com/blockchain/coin/#COIN#'
+                    example: 'https://www.chiaexplorer.com/blockchain/address/#ADDRESS#'
                   blockRewardDistributionDelay:
                     type: number
                     example: 50
