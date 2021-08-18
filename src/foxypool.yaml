@@ -1,0 +1,425 @@
+openapi: '3.0.0'
+info:
+  version: '1.0.0'
+  title: 'Foxy-Pool API'
+  description: 'The documentation for the Foxy-Pool API'
+servers:
+  - url: 'https://api2.foxypool.io/api/v2/{pool}'
+    variables:
+      pool:
+        enum:
+          - chia
+          - chia-og
+          - flax-og
+        default: chia
+tags:
+  - name: Pool API
+    description: Pool-wide global data
+  - name: Account API
+    description: API involving a user account
+paths:
+  /config:
+    get:
+      summary: 'Provides general pool config values'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  poolUrl:
+                    type: string
+                    example: 'https://chia.foxypool.io'
+                  blockExplorerBlockUrlTemplate:
+                    type: string
+                    example: 'https://www.chiaexplorer.com/blockchain/block/#HASH#'
+                  blockExplorerCoinUrlTemplate:
+                    type: string
+                    example: 'https://www.chiaexplorer.com/blockchain/coin/#COIN#'
+                  blockExplorerAddressUrlTemplate:
+                    type: string
+                    example: 'https://www.chiaexplorer.com/blockchain/coin/#COIN#'
+                  blockRewardDistributionDelay:
+                    type: number
+                    example: 50
+                  blocksPerDay:
+                    type: number
+                    example: 4608
+                    description: The amount of blocks the specific chain produces per day, unrelated to the pool itself
+                  defaultDistributionRatio:
+                    type: string
+                    example: '0-100'
+                  historicalTimeInMinutes:
+                    type: number
+                    example: 1440
+                    description: The amount number of minutes used for EC calculation
+                  minimumPayout:
+                    type: number
+                    example: 0.01
+                  onDemandPayoutFee:
+                    type: number
+                    example: 0.01
+                    description: The absolute coin amount to deduct from on demand payouts
+                  poolFee:
+                    type: number
+                    example: 1
+                    description: The pool fee as percentage, 1 equals 1%
+                  coin:
+                    type: string
+                    example: 'CHIA'
+                  ticker:
+                    type: string
+                    example: 'XCH'
+                  version:
+                    type: string
+                    example: '1.1.0'
+                  isTestnet:
+                    type: boolean
+                    example: false
+                  poolAddress:
+                    type: string
+                    example: 'xch1qjrct2gwv36jv0za8n0cec5sfxwa7yqx50aw9vc5n9lwjwa9tnqsyj377f'
+                  poolName:
+                    type: string
+                    example: 'Foxy-Pool CHIA'
+                  farmingUrl:
+                    type: string
+                    example: 'https://farmer.chia.foxypool.io'
+  /pool:
+    get:
+      summary: 'Provides current general pool stats'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  height:
+                    type: number
+                    example: 733623
+                  difficulty:
+                    type: number
+                    example: 2720
+                  receivedAt:
+                    type: string
+                    format: date-time
+                    example: '2021-08-18T16:20:15.964Z'
+                  networkSpaceInTiB:
+                    type: string
+                    example: '35160006.15615693479776382446'
+                  balance:
+                    type: string
+                    example: '3.64045042599'
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                            - 'extra-block-reward'
+                          example: 'extra-block-reward'
+                        startedAt:
+                          type: string
+                          format: date-time
+                          nullable: true
+                          example: '2021-08-18T16:20:15.964Z'
+                        endedAt:
+                          type: string
+                          format: date-time
+                          nullable: true
+                          example: '2021-08-18T16:25:15.964Z'
+                        state:
+                          type: string
+                          enum:
+                            - 'upcoming'
+                            - 'active'
+                            - 'ended'
+                          example: 'ended'
+                        payload:
+                          type: object
+                          properties:
+                            extraReward:
+                              type: number
+                              example: 0.1
+                            creditedCount:
+                              type: number
+                              example: 10
+                            totalCount:
+                              type: number
+                              example: 10
+                    description: Extra reward events where members of the pool receive coins in addition to the block reward
+  /accounts:
+    get:
+      summary: 'Provides general account stats'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  topAccounts:
+                    type: array
+                    minItems: 0
+                    maxItems: 10
+                    items:
+                      type: object
+                      properties:
+                        pending:
+                          type: string
+                          example: '0.97848338769575142823305'
+                        ec:
+                          type: number
+                          example: 729889.5394569263
+                          description: The estimated capacity for this account in GiB
+                        payoutAddress:
+                          type: string
+                          example: 'xch12lujudyqvdgtj30580urjc7mku5cnt5e8nz9skwl4ee4rspvwyqq9hmtcv'
+                        distributionRatio:
+                          type: string
+                          example: '0-100'
+                        name:
+                          type: string
+                          nullable: true
+                          example: 'Felix 👑'
+                  accountsWithShares:
+                    type: number
+                    example: 296
+                  ecSum:
+                    type: number
+                    example: 17761170.517117716
+                    description: The total pool capacity based on each farmers EC
+  /rewards:
+    get:
+      summary: 'Provides general reward stats'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  recentlyWonBlocks:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        winner:
+                          type: object
+                          properties:
+                            payoutAddress:
+                              type: string
+                              example: 'xch1e6kjg4rd3zfa8ywmwh0d309hqh7l0jflc6hkv5rcjjnutw57a0aq48t683'
+                            name:
+                              type: string
+                              nullable: true
+                              example: 'Felix 👑'
+                        isRewardClaimed:
+                          type: boolean
+                          example: true
+                        height:
+                          type: number
+                          example: 731693
+                        hash:
+                          type: string
+                          example: '0x1ee5a1fa0beb53f42481fa74a8aef9442cb6221843a34307b23a2b4c6fa06a0f'
+                        reward:
+                          type: number
+                          example: 1.75
+                        networkSpaceInTib:
+                          type: string
+                          example: '33054168.386786632239818573'
+                          description: The total network space of the chain at the time of the block win
+                        distributed:
+                          type: boolean
+                          example: true
+                        distributionRatio:
+                          type: string
+                          example: '0-100'
+                          description: The DR of the block winner and thus the block itself
+                        createdAt:
+                          type: string
+                          format: date-time
+                          example: '2021-08-18T06:24:30.046Z'
+                  dailyRewardPerPiB:
+                    type: number
+                    example: 0.30205999197851824
+                    description: The estimated daily reward per PiB EC based on the past 7 days of block wins by the pool
+  /payouts:
+    get:
+      summary: 'Provides the recent payouts'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    transactions:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          coinIds:
+                            type: array
+                            items:
+                              type: string
+                              example: 'fca8bc18b084b86e82888379c84c19fffa62c4b7baf509e061b80bb0be128471'
+                          payoutAmounts:
+                            type: object
+                            properties:
+                              <payout address>:
+                                type: string
+                                example: '0.089634173953569022779575'
+                    createdAt:
+                      type: string
+                      format: date-time
+                      example: '2021-08-18T06:24:30.046Z'
+  /rates:
+    get:
+      summary: 'Provides the exchange rates for the coin of the specific pool, if available'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rates:
+                    type: object
+                    properties:
+                      <ticker>:
+                        type: number
+                        example: 215.93
+                  currencies:
+                    type: array
+                    items:
+                      type: string
+                      example: 'eur'
+  /account/{account}:
+    get:
+      summary: 'Provides data on the selected account'
+      tags:
+        - Account API
+      parameters:
+        - name: account
+          in: path
+          description: The Launcher ID or Pool Public Key of the account, depending on the pool
+          required: true
+          schema:
+            type: string
+          examples:
+            Launcher Id:
+              value: 'f3607869ebb08f64e74cc1046eed86c97d52429354b262b83f8a95d1427e388d'
+            Pool Public Key:
+              value: 'adffc665455b9056b3e70001324f6b1c0711c24b3c7d33a9a0e530d572ef4b30aae6ba993b26dd9969b15b81b7c50401'
+      responses:
+        404:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'Unknown account "adffc665455b9056b3e70001324f6b1c0711c24b3c7d33a9a0e530d572ef4b30aae6ba993b26dd9969b15b81b7c50401"'
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  difficulty:
+                    type: number
+                    example: 28
+                  pending:
+                    type: string
+                    example: '0'
+                  ec:
+                    type: number
+                    example: 64369.14995312691
+                    description: The accounts EC in GiB based on partials submitted and accepted by the pool
+                  shares:
+                    type: number
+                    example: 6048
+                    description: The amount of shares (points) over the historical time configured for the pool for this account
+                  payoutAddress:
+                    type: string
+                    example: 'xch1063ymlv3saaxkh87h287nc3laelnxss0897xdw6g8zj6yvaa4elslg0xfa'
+                  distributionRatio:
+                    type: string
+                    example: '0-100'
+                  lastAcceptedPartialAt:
+                    type: string
+                    format: date-time
+                    example: '2021-08-18T17:14:36.150Z'
+                  name:
+                    type: string
+                    nullable: true
+                    example: 'Felix 👑'
+                  minimumPayout:
+                    type: string
+                    example: '0.1'
+                  singleton:
+                    type: object
+                    description: Only present on NFT pools
+                    properties:
+                      genesis:
+                        type: string
+                        example: 'f3607869ebb08f64e74cc1046eed86c97d52429354b262b83f8a95d1427e388d'
+                  isPoolMember:
+                    type: boolean
+                    example: true
+                    description: Only present on NFT pools
+                  poolPublicKey:
+                    type: string
+                    example: 'adffc665455b9056b3e70001324f6b1c0711c24b3c7d33a9a0e530d572ef4b30aae6ba993b26dd9969b15b81b7c50401'
+                    description: Only present on OG pools
+                  collateral:
+                    type: string
+                    nullable: true
+                    example: '1.2342132'
+                    description: Only present on OG pools
+                  isCheating:
+                    type: boolean
+                    nullable: true
+                    description: Only present on OG pools
+                  hasLeftThePool:
+                    type: boolean
+                    nullable: true
+                    description: Only present on OG pools
+                required:
+                  - payoutAddress
+                  - pending
+                  - difficulty
+                  - ec
+                  - shares
+                  - distributionRatio
+                  - lastAcceptedPartialAt
+
