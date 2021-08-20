@@ -253,6 +253,10 @@ paths:
                           type: string
                           example: '0-100'
                           description: The DR of the block winner and thus the block itself
+                        effort:
+                          type: number
+                          example: 0.9573
+                          nullable: true
                         createdAt:
                           type: string
                           format: date-time
@@ -261,6 +265,11 @@ paths:
                     type: number
                     example: 0.30205999197851824
                     description: The estimated daily reward per PiB EC based on the past 7 days of block wins by the pool
+                  averageEffort:
+                    type: number
+                    example: 0.9573
+                    nullable: true
+                    description: The average effort based on the past 7 days of block wins by the pool
   /payouts:
     get:
       summary: 'Provides the recent payouts'
