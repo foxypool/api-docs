@@ -5,8 +5,38 @@
         <title>Foxy-Pool API Docs</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="assets/favicon.ico">
+        <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@3.52.0/swagger-ui.css">
     </head>
     <body>
         <div id="swagger"></div>
+        <script src="https://unpkg.com/swagger-ui-dist@3.52.0/swagger-ui-standalone-preset.js"></script>
+        <script src="https://unpkg.com/swagger-ui-dist@3.52.0/swagger-ui-bundle.js"></script>
+
+        <script>
+          window.onload = function() {
+            // Build a system
+            const ui = SwaggerUIBundle({
+              urls: [{
+                url: 'specs/post/swagger.yaml',
+                name: 'Proof-of-Spacetime (PoSt)',
+              }, {
+                url: 'specs/poc/swagger.yaml',
+                name: 'Proof-of-Capacity (PoC)',
+              }],
+              presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+              ],
+              plugins: [
+                SwaggerUIBundle.plugins.DownloadUrl
+              ],
+              dom_id: '#swagger',
+              deepLinking: true,
+              tryItOutEnabled: true,
+              layout: 'StandaloneLayout',
+            });
+            window.ui = ui;
+          }
+        </script>
     </body>
 </html>

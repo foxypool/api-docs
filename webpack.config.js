@@ -14,13 +14,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.yaml$/,
-        use: [
-          { loader: 'json-loader' },
-          { loader: 'yaml-loader' },
-        ]
-      },
-      {
         test: /\.css$/,
         use: [
           { loader: 'style-loader' },
@@ -40,6 +33,9 @@ module.exports = {
       }, {
         from: resolve(__dirname, 'assets'),
         to: './assets'
+      }, {
+        from: resolve(__dirname, 'specs'),
+        to: './specs'
       }],
     }),
     new HtmlWebpackPlugin({

@@ -1,0 +1,49 @@
+openapi: '3.0.0'
+info:
+  version: '1.0.0'
+  title: 'Foxy-Pool PoC API'
+  description: 'The documentation for the Foxy-Pool Proof-of-Capacity (PoC) API'
+servers:
+  - url: 'https://api.foxypool.io/api/stats/{pool}'
+    variables:
+      pool:
+        enum:
+          - bhd
+          - signa
+        default: bhd
+tags:
+  - name: Pool API
+    description: Pool-wide global data
+paths:
+  /config:
+    get:
+      summary: 'Provides general pool config values'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
+  /pool:
+    get:
+      summary: 'Provides current general pool stats'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
+  /round:
+    get:
+      summary: 'Provides general current round stats'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
+  /live:
+    get:
+      summary: 'Provides current round live deadline stats'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
