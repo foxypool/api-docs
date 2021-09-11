@@ -11,6 +11,7 @@ servers:
           - chia
           - chia-og
           - flax-og
+          - chives-og
         default: chia
 tags:
   - name: Pool API
