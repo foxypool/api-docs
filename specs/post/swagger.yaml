@@ -160,6 +160,37 @@ paths:
                               type: number
                               example: 10
                     description: Extra reward events where members of the pool receive coins in addition to the block reward
+  /pool/historical:
+    get:
+      summary: 'Provides historical general pool stats'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      format: date-time
+                      example: '2021-08-18T16:20:15.964Z'
+                    blocks:
+                      type: number
+                      example: 42
+                    effort:
+                      type: number
+                      example: 0.96
+                    poolEcInTib:
+                      type: string
+                      example: '27885.63355206747485351563'
+                    networkSpaceInTiB:
+                      type: string
+                      example: '37938202.7196226269006729126'
   /accounts:
     get:
       summary: 'Provides general account stats'
@@ -433,4 +464,57 @@ paths:
                   - shares
                   - distributionRatio
                   - lastAcceptedPartialAt
-
+  /account/{account}/historical:
+    get:
+      summary: 'Provides historical data for the selected account'
+      tags:
+        - Account API
+      parameters:
+        - name: account
+          in: path
+          description: The Launcher ID or Pool Public Key of the account, depending on the pool
+          required: true
+          schema:
+            type: string
+          examples:
+            Launcher Id:
+              value: 'f3607869ebb08f64e74cc1046eed86c97d52429354b262b83f8a95d1427e388d'
+            Pool Public Key:
+              value: 'adffc665455b9056b3e70001324f6b1c0711c24b3c7d33a9a0e530d572ef4b30aae6ba993b26dd9969b15b81b7c50401'
+      responses:
+        404:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'account_not_found'
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    shares:
+                      type: number
+                      example: 400
+                    shareCount:
+                      type: number
+                      example: 4
+                    ec:
+                      type: number
+                      example: 64369.14995312691
+                      description: The accounts EC in GiB at this point in time
+                    difficulty:
+                      type: number
+                      example: 100
+                    createdAt:
+                      type: string
+                      format: date-time
+                      example: '2021-08-18T17:14:36.150Z'
