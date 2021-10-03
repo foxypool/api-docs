@@ -4,7 +4,7 @@ info:
   title: 'Foxy-Pool PoC API'
   description: 'The documentation for the Foxy-Pool Proof-of-Capacity (PoC) API'
 servers:
-  - url: 'https://api.foxypool.io/api/stats/{pool}'
+  - url: 'https://api.foxypool.io/api/v1/{pool}'
     variables:
       pool:
         enum:
@@ -31,9 +31,57 @@ paths:
       responses:
         200:
           description: 'Success'
+  /pool/overview:
+    get:
+      summary: 'Provides current overview pool stats'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
+  /accounts:
+    get:
+      summary: 'Provides current general account stats'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
+  /rewards:
+    get:
+      summary: 'Provides current general reward stats'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
+  /payouts:
+    get:
+      summary: 'Provides the recent payouts'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
+  /rates:
+    get:
+      summary: 'Provides the exchange rates for the coin of the specific pool, if available'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
   /round:
     get:
-      summary: 'Provides general current round stats'
+      summary: 'Provides current general round stats'
+      tags:
+        - Pool API
+      responses:
+        200:
+          description: 'Success'
+  /round/overview:
+    get:
+      summary: 'Provides current overview round stats'
       tags:
         - Pool API
       responses:
