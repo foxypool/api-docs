@@ -91,6 +91,9 @@ paths:
                   farmingUrl:
                     type: string
                     example: 'https://farmer.chia.foxypool.io'
+                  poolRewardPortion:
+                    type: number
+                    example: 1.75
   /pool:
     get:
       summary: 'Provides current general pool stats'
@@ -253,6 +256,15 @@ paths:
                     items:
                       type: object
                       properties:
+                        rewardClaimTx:
+                          type: object
+                          properties:
+                            state:
+                              type: string
+                              enum:
+                                - 'IN_MEMPOOL'
+                                - 'CONFIRMED'
+                              example: 'CONFIRMED'
                         winner:
                           type: object
                           properties:
@@ -318,11 +330,24 @@ paths:
                 items:
                   type: object
                   properties:
+                    state:
+                      type: string
+                      enum:
+                        - 'IN_MEMPOOL'
+                        - 'PARTIALLY_CONFIRMED'
+                        - 'CONFIRMED'
+                      example: 'CONFIRMED'
                     transactions:
                       type: array
                       items:
                         type: object
                         properties:
+                          state:
+                            type: string
+                            enum:
+                              - 'IN_MEMPOOL'
+                              - 'CONFIRMED'
+                            example: 'CONFIRMED'
                           coinIds:
                             type: array
                             items:
@@ -504,6 +529,12 @@ paths:
                     shares:
                       type: number
                       example: 400
+                    staleShares:
+                      type: number
+                      example: 0
+                    invalidShares:
+                      type: number
+                      example: 0
                     shareCount:
                       type: number
                       example: 4
