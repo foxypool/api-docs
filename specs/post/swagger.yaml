@@ -13,6 +13,7 @@ servers:
           - flax-og
           - chives-og
           - hddcoin-og
+          - stai-og
         default: chia
 tags:
   - name: Pool API
