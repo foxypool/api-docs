@@ -11,6 +11,7 @@ servers:
           - chia
           - chia-og
           - flax-og
+          - chives
           - chives-og
           - hddcoin-og
           - stai-og
