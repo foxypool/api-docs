@@ -551,3 +551,54 @@ paths:
                       type: string
                       format: date-time
                       example: '2021-08-18T17:14:36.150Z'
+  /account/{account}/won-blocks:
+    get:
+      summary: 'Provides past won blocks for the selected account'
+      tags:
+        - Account API
+      parameters:
+        - name: account
+          in: path
+          description: The Launcher ID or Pool Public Key of the account, depending on the pool
+          required: true
+          schema:
+            type: string
+          examples:
+            Launcher Id:
+              value: 'f3607869ebb08f64e74cc1046eed86c97d52429354b262b83f8a95d1427e388d'
+            Pool Public Key:
+              value: 'adffc665455b9056b3e70001324f6b1c0711c24b3c7d33a9a0e530d572ef4b30aae6ba993b26dd9969b15b81b7c50401'
+      responses:
+        404:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'account_not_found'
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    height:
+                      type: number
+                      example: 757998
+                    hash:
+                      type: string
+                      example: '0xc93ba3fc06222cc7c864024e85bcec510aa77643773458d429042f8af290dfd8'
+                    effort:
+                      type: number
+                      example: 0.42
+                      nullable: true
+                    createdAt:
+                      type: string
+                      format: date-time
+                      example: '2021-12-16T05:44:13.470Z'
