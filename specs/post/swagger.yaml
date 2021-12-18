@@ -350,6 +350,10 @@ paths:
                               - 'IN_MEMPOOL'
                               - 'CONFIRMED'
                             example: 'CONFIRMED'
+                          confirmedAtHeight:
+                            type: number
+                            nullable: true
+                            example: 1234344
                           coinIds:
                             type: array
                             items:
