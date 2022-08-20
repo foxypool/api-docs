@@ -10,11 +10,8 @@ servers:
         enum:
           - chia
           - chia-og
-          - flax-og
           - chives
           - chives-og
-          - hddcoin-og
-          - stai-og
         default: chia
 tags:
   - name: Pool API
