@@ -544,7 +544,11 @@ paths:
                     ec:
                       type: number
                       example: 64369.14995312691
-                      description: The accounts EC in GiB at this point in time
+                      description: The accounts EC in GiB at this point in time using the last 24h of partials
+                    ecLastHour:
+                      type: number
+                      example: 69420.3456435
+                      description: The accounts EC in GiB at this point in time using the last 1h of partials
                     difficulty:
                       type: number
                       example: 100
