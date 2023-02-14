@@ -456,6 +456,10 @@ paths:
                   minimumPayout:
                     type: string
                     example: '0.1'
+                  isFixedDifficulty:
+                    type: boolean
+                    example: false
+                    description: Whether this account has a fixed difficulty set
                   singleton:
                     type: object
                     description: Only present on NFT pools
