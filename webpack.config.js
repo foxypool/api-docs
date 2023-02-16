@@ -10,6 +10,7 @@ module.exports = {
   entry: './src/index.js',
   resolve: {
     extensions: ['.js'],
+    fallback: { path: require.resolve('path-browserify') },
   },
   module: {
     rules: [
@@ -26,11 +27,6 @@ module.exports = {
     new CleanWebpackPlugin(),
     new CopyWebpackPlugin({
       patterns: [{
-        // Copy the Swagger OAuth2 redirect file to the project root;
-        // that file handles the OAuth2 redirect after authenticating the end-user.
-        from: require.resolve('swagger-ui/dist/oauth2-redirect.html'),
-        to: './'
-      }, {
         from: resolve(__dirname, 'assets'),
         to: './assets'
       }, {
