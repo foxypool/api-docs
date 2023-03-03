@@ -10,8 +10,6 @@ servers:
         enum:
           - chia
           - chia-og
-          - chives
-          - chives-og
         default: chia
 tags:
   - name: Pool API
@@ -434,7 +432,11 @@ paths:
                   ec:
                     type: number
                     example: 64369.14995312691
-                    description: The accounts EC in GiB based on partials submitted and accepted by the pool
+                    description: The accounts average EC in GiB based on partials submitted and accepted by the pool in the last 24 hours
+                  ecLastHour:
+                    type: number
+                    example: 69369.3453523
+                    description: The accounts current EC in GiB based on partials submitted and accepted by the pool in the last hour
                   shares:
                     type: number
                     example: 6048
@@ -460,6 +462,16 @@ paths:
                     type: boolean
                     example: false
                     description: Whether this account has a fixed difficulty set
+                  notificationSettings:
+                    type: object
+                    properties:
+                      areNotificationsEnabled:
+                        type: boolean
+                        example: false
+                      ecLastHourThreshold:
+                        type: number
+                        example: 66369
+                        description: When the current ec drops below or increases above the threshold a notification is sent to all subscribed users
                   singleton:
                     type: object
                     description: Only present on NFT pools
