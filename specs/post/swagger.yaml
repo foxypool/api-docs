@@ -465,13 +465,17 @@ paths:
                   notificationSettings:
                     type: object
                     properties:
-                      areNotificationsEnabled:
+                      areEcChangeNotificationsEnabled:
                         type: boolean
                         example: false
                       ecLastHourThreshold:
                         type: number
                         example: 66369
-                        description: When the current ec drops below or increases above the threshold a notification is sent to all subscribed users
+                        description: When the current ec drops below or increases above the threshold a notification is sent to all subscribed users when `areEcChangeNotificationsEnabled` is `true`
+                      areBlockWonNotificationsEnabled:
+                        type: boolean
+                        example: false
+                        description: When set to `true` and the account wins a block a notification is sent to all subscribed users
                   singleton:
                     type: object
                     description: Only present on NFT pools
