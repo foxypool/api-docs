@@ -16,6 +16,8 @@ tags:
     description: Pool-wide global data
   - name: Account API
     description: API involving a user account
+  - name: Harvester API
+    description: API involving a harvester
 paths:
   /config:
     get:
@@ -35,13 +37,13 @@ paths:
                     example: 'https://chia.foxypool.io'
                   blockExplorerBlockUrlTemplate:
                     type: string
-                    example: 'https://www.chiaexplorer.com/blockchain/block/#HASH#'
+                    example: 'https://alltheblocks.net/chia/block/#HASH#'
                   blockExplorerCoinUrlTemplate:
                     type: string
-                    example: 'https://www.chiaexplorer.com/blockchain/coin/#COIN#'
+                    example: 'https://alltheblocks.net/chia/coin/#COIN#'
                   blockExplorerAddressUrlTemplate:
                     type: string
-                    example: 'https://www.chiaexplorer.com/blockchain/address/#ADDRESS#'
+                    example: 'https://alltheblocks.net/chia/address/#ADDRESS#'
                   blockRewardDistributionDelay:
                     type: number
                     example: 50
@@ -228,6 +230,21 @@ paths:
                           type: string
                           nullable: true
                           example: 'Felix 👑'
+                        rank:
+                          type: number
+                          example: 3
+                          description: The rank in the pool
+                        singleton:
+                          type: object
+                          description: Only present on NFT pools
+                          properties:
+                            genesis:
+                              type: string
+                              example: 'f3607869ebb08f64e74cc1046eed86c97d52429354b262b83f8a95d1427e388d'
+                        poolPublicKey:
+                          type: string
+                          example: 'adffc665455b9056b3e70001324f6b1c0711c24b3c7d33a9a0e530d572ef4b30aae6ba993b26dd9969b15b81b7c50401'
+                          description: Only present on OG pools
                   accountsWithShares:
                     type: number
                     example: 296
@@ -437,6 +454,10 @@ paths:
                     type: number
                     example: 69369.3453523
                     description: The accounts current EC in GiB based on partials submitted and accepted by the pool in the last hour
+                  rank:
+                    type: number
+                    example: 3
+                    description: The rank in the pool
                   shares:
                     type: number
                     example: 6048
@@ -476,6 +497,20 @@ paths:
                         type: boolean
                         example: false
                         description: When set to `true` and the account wins a block a notification is sent to all subscribed users
+                      arePayoutAddressChangeNotificationsEnabled:
+                        type: boolean
+                        example: false
+                        description: When set to `true` and the accounts payout address is changed a notification is sent to all subscribed users
+                  createdAt:
+                    type: string
+                    format: date-time
+                    example: '2021-08-18T17:14:36.150Z'
+                  rejoinedAt:
+                    type: string
+                    format: date-time
+                    nullable: true
+                    example: '2023-05-01T13:44:13.530Z'
+                    description: Only present when the account left the pool at least once and rejoined again
                   singleton:
                     type: object
                     description: Only present on NFT pools
@@ -627,6 +662,22 @@ paths:
                       type: string
                       format: date-time
                       example: '2021-12-16T05:44:13.470Z'
+                    remarks:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                              - 'GIGAHORSE_DEV_FEE'
+                              - 'CORE_POOL_FARMER_REWARD'
+                              - 'HPOOL_FARMER_REWARD'
+                              - 'FARMER_REWARD_ADDRESS_DIFFERS'
+                            example: 'GIGAHORSE_DEV_FEE'
+                          meta:
+                            type: object
+                            nullable: true
   /account/{account}/payouts:
     get:
       summary: 'Provides past payouts for the selected account'
@@ -680,3 +731,129 @@ paths:
                       type: string
                       format: date-time
                       example: '2021-08-18T06:24:30.046Z'
+  /account/{account}/harvesters:
+    get:
+      summary: 'Provides the known harvesters for the selected account'
+      tags:
+        - Account API
+      parameters:
+        - name: account
+          in: path
+          description: The Launcher ID or Pool Public Key of the account, depending on the pool
+          required: true
+          schema:
+            type: string
+          examples:
+            Launcher Id:
+              value: 'f3607869ebb08f64e74cc1046eed86c97d52429354b262b83f8a95d1427e388d'
+            Pool Public Key:
+              value: 'adffc665455b9056b3e70001324f6b1c0711c24b3c7d33a9a0e530d572ef4b30aae6ba993b26dd9969b15b81b7c50401'
+      responses:
+        404:
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'account_not_found'
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    peerId:
+                      type: string
+                      example: '0x3071efce6dcf09c88378e9169a700772ed7c750efd1ca575377a599d78c1a926'
+                    versionInfo:
+                      type: object
+                      properties:
+                        clientName:
+                          type: string
+                          example: 'Chia Blockchain'
+                        clientVersion:
+                          type: string
+                          example: '1.7.1'
+                        localName1:
+                          type: string
+                          nullable: true
+                          example: 'og'
+                        localVersion1:
+                          type: string
+                          nullable: true
+                          example: '1.4.0'
+                        localName2:
+                          type: string
+                          nullable: true
+                          example: 'ff'
+                        localVersion2:
+                          type: string
+                          nullable: true
+                          example: '1.3.0'
+                    lastAcceptedPartialAt:
+                      type: string
+                      format: date-time
+                      example: '2021-08-18T17:14:36.150Z'
+                    name:
+                      type: string
+                      nullable: true
+  /harvester/{harvesterId}/stats:
+    get:
+      summary: 'Provides the stats for the selected harvester'
+      tags:
+        - Harvester API
+      parameters:
+        - name: harvesterId
+          in: path
+          description: The _id of the harvester
+          required: true
+          schema:
+            type: string
+          example: '64370fb28c7df263c8b41d87'
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  submissionStats:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        shares:
+                          type: number
+                        partials:
+                          type: number
+                        date:
+                          type: string
+                          format: date-time
+                          example: '2021-08-18T17:14:36.150Z'
+                  rejectedSubmissionStats:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        shares:
+                          type: number
+                        partials:
+                          type: number
+                        date:
+                          type: string
+                          format: date-time
+                          example: '2021-08-18T17:14:36.150Z'
+                        type:
+                          type: string
+                          enum:
+                            - 'STALE'
+                            - 'INVALID'
