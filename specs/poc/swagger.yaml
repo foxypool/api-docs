@@ -8,9 +8,8 @@ servers:
     variables:
       pool:
         enum:
-          - bhd
           - signa
-        default: bhd
+        default: signa
 tags:
   - name: Pool API
     description: Pool-wide global data
