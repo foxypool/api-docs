@@ -7,9 +7,6 @@ SwaggerUIBundle({
   urls: [{
     url: 'specs/post/swagger.yaml',
     name: 'Proof-of-Spacetime (PoSt)',
-  }, {
-    url: 'specs/poc/swagger.yaml',
-    name: 'Proof-of-Capacity (PoC)',
   }],
   presets: [
     SwaggerUIBundle.presets.apis,
