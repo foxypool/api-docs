@@ -4,7 +4,7 @@ info:
   title: 'Foxy-Pool PoSt API'
   description: 'The documentation for the Foxy-Pool Proof-of-Spacetime (PoSt) API'
 servers:
-  - url: 'https://api2.foxypool.io/api/v2/{pool}'
+  - url: 'https://api2.foxypool.io/api/v3/{pool}'
     variables:
       pool:
         enum:
@@ -1003,43 +1003,25 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  submissionStats:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        shares:
-                          type: number
-                        partials:
-                          type: number
-                        proofTimeSumInSeconds:
-                          type: number
-                        date:
-                          type: string
-                          format: date-time
-                          example: '2021-08-18T17:14:36.150Z'
-                  rejectedSubmissionStats:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        shares:
-                          type: number
-                        partials:
-                          type: number
-                        proofTimeSumInSeconds:
-                          type: number
-                        date:
-                          type: string
-                          format: date-time
-                          example: '2021-08-18T17:14:36.150Z'
-                        type:
-                          type: string
-                          enum:
-                            - 'STALE'
-                            - 'INVALID'
+                type: array
+                items:
+                  type: object
+                  properties:
+                    shares:
+                      type: number
+                    staleShares:
+                      type: number
+                    invalidShares:
+                      type: number
+                    partials:
+                      type: number
+                    proofTimeInSeconds:
+                      type: number
+                      nullable: true
+                    receivedAt:
+                      type: string
+                      format: date-time
+                      example: '2021-08-18T17:14:36.150Z'
   /harvester/{harvesterId}/proof-times:
     get:
       summary: 'Provides the proof times for the selected harvester'
