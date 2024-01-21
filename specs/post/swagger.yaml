@@ -4,7 +4,7 @@ info:
   title: 'Foxy-Pool PoSt API'
   description: 'The documentation for the Foxy-Pool Proof-of-Spacetime (PoSt) API'
 servers:
-  - url: 'https://api2.foxypool.io/api/v3/{pool}'
+  - url: 'https://api.foxypool.io/api/v3/{pool}'
     variables:
       pool:
         enum:
