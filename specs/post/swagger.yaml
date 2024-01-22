@@ -989,7 +989,7 @@ paths:
           required: true
           schema:
             type: string
-          example: '650a030470281311b361fe7d'
+          example: '65a1613210cf8a6396737fd5'
         - name: duration
           in: query
           required: true
@@ -1034,7 +1034,7 @@ paths:
           required: true
           schema:
             type: string
-          example: '650a030470281311b361fe7d'
+          example: '65a1613210cf8a6396737fd5'
         - name: duration
           in: query
           required: true
